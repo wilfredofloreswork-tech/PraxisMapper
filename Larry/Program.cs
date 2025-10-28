@@ -440,14 +440,23 @@ namespace Larry
             PraxisContext.connectionString = config["DbConnectionString"];
             PraxisContext.serverMode = config["DbMode"];
 
+            var assemblyDirectory = AppContext.BaseDirectory;
             if (config["MapTilesEngine"] == "SkiaSharp")
             {
-                var asm = Assembly.LoadFrom(@"PraxisMapTilesSkiaSharp.dll");
+                var assemblyPath = Path.Combine(assemblyDirectory, "PraxisMapTilesSkiaSharp.dll");
+                if (!File.Exists(assemblyPath))
+                    throw new FileNotFoundException($"Could not find the SkiaSharp map tile assembly at '{assemblyPath}'. Build the PraxisMapTilesSkiaSharp project or adjust the MapTilesEngine setting in Larry.config.json.");
+
+                var asm = Assembly.LoadFrom(assemblyPath);
                 MapTiles = (IMapTiles)Activator.CreateInstance(asm.GetType("PraxisCore.MapTiles"));
             }
             else if (config["MapTilesEngine"] == "ImageSharp")
             {
-                var asm2 = Assembly.LoadFrom(@"PraxisMapTilesImageSharp.dll");
+                var assemblyPath = Path.Combine(assemblyDirectory, "PraxisMapTilesImageSharp.dll");
+                if (!File.Exists(assemblyPath))
+                    throw new FileNotFoundException($"Could not find the ImageSharp map tile assembly at '{assemblyPath}'. Build the PraxisMapTilesImageSharp project or adjust the MapTilesEngine setting in Larry.config.json.");
+
+                var asm2 = Assembly.LoadFrom(assemblyPath);
                 MapTiles = (IMapTiles)Activator.CreateInstance(asm2.GetType("PraxisCore.MapTiles"));
             }
             MapTileSupport.GameTileScale = config["mapTileScaleFactor"].ToInt();

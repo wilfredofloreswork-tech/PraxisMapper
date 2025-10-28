@@ -36,6 +36,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoreComponents\PraxisCore.csproj" />
+    <ProjectReference Include="..\PraxisMapTilesSkiaSharp\PraxisMapTilesSkiaSharp.csproj" />
+    <ProjectReference Include="..\PraxisCoreMapTilesImageSharp\PraxisMapTilesImageSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
